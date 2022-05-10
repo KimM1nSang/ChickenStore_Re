@@ -14,6 +14,14 @@ public class ShootManager : MonoBehaviour
     {
         curBullet = MaxBullet;
     }
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            print("น฿ป็");
+            GuestManager.Instance.ShootGuest();
+        }
+    }
     public bool Shoot()
     {
         if(curBullet > 0)
