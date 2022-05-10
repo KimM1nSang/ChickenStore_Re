@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9048114464582202923}
   - component: {fileID: 9048114464582202917}
   - component: {fileID: 9048114464582202922}
+  - component: {fileID: 3475269851299844913}
   m_Layer: 5
   m_Name: UIChicken
   m_TagString: Pickable
@@ -75,3 +76,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3475269851299844913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9048114464582202920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e46e8d027b1e3d43812097b54a87d33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

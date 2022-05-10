@@ -16,15 +16,25 @@ public class DisposingChicken : InteractableUIDisposingObject
             Guest guest = keyResult.gameObject.GetComponent<Guest>();
             if (guest != null)
             {
-                if(!guest.isOffered)
+                if(guest.canOffered&& guest.isArrive)
                 {
-                    if (GuestManager.Instance.Offer())
+                    ChickenData chickenData = currentDisposedObject.GetComponent<ChickenData>();
+                    if (chickenData.chickenType == guest.wishChicken)
                     {
-                        guest.isOffered = true;
-                        Destroy(currentDisposedObject.gameObject);
+                        guest.SetExitComment(ExitType.POSITIVE);
                     }
+                    else
+                    {
+                        guest.SetExitComment(ExitType.NEGATIVE);
+                    }
+                    GuestManager.Instance.Complete(()=> {
+                        SaveManager.Instance.moneyData.AddGold(chickenData.Price);
+                    });
+                    Destroy(currentDisposedObject.gameObject);
+                    guest.canOffered = false;
+
                 }
-               
+
             }
          
         }

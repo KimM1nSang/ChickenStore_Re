@@ -14,6 +14,7 @@ public class GuestManager : MonoBehaviour
     public Transform windowTrm;
 
     public Text guestComment;
+
     private void Awake()
     {
         Instance = this;
@@ -31,7 +32,7 @@ public class GuestManager : MonoBehaviour
         }
         
         curGuest.SetUp();
-        curGuest.GuestEnter();
+        curGuest.GuestEnter(EnterComment);
 
     }
     public bool Offer()
@@ -42,18 +43,49 @@ public class GuestManager : MonoBehaviour
             {
                 // 치킨이 고객의 주문에 맞으면 트루
                 // 치킨을 제공했을때의 처리
+                //curGuest.SetComment();
                 guestComment.DOText(curGuest.ExitComment, 1).OnComplete(() => {
                     SaveManager.Instance.moneyData.AddGold(100);
-                    GetNextGuest();
+                    GuestCommentRefresh();
+                    curGuest.GuestExit(() => { CreateGuest(); });
                 });
                 return true;
             }
         }
         return false;
     }
-    public void GetNextGuest()
+    public void Complete(Action act = null)
     {
-       
+        // 치킨이 고객의 주문에 맞으면 트루
+        // 치킨을 제공했을때의 처리
+        //curGuest.SetComment();
+        GuestCommentRefresh();
+
+        guestComment.DOText(curGuest.ExitComment, 1).OnComplete(() => {
+            act?.Invoke();
+            GuestExit();
+        });
+    }
+    public void EnterComment()
+    {
+        GuestCommentRefresh();
+
+        guestComment.DOText(curGuest.EnterComment, 1).OnComplete(()=> { curGuest.canOffered = true; });
+    }
+    public void ShootGuest()
+    {
+        if (curGuest.canOffered && curGuest.isArrive)
+        {
+            GameManager.Instance.CameraShaking(2);
+
+            curGuest.SetExitComment(ExitType.SHOOTED);
+            Complete();
+            curGuest.canOffered = false;
+        }
+    }
+
+    public void GuestExit()
+    {
         GuestCommentRefresh();
         curGuest.GuestExit(() => { CreateGuest(); });
     }
