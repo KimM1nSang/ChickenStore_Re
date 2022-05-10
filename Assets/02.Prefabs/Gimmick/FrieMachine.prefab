@@ -263,6 +263,7 @@ MonoBehaviour:
   <addValue>k__BackingField: 10
   valPercet: 0
   sliderFill: {fileID: 561400099707251256}
+  canFrieTemp: 0
 --- !u!1 &561400100608123047
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,4 +540,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b7a3e0565bfaca4cb399d0f91ae169f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oilTempSlider: {fileID: 561400100496747810}
+  <oilTempSlider>k__BackingField: {fileID: 561400100496747810}
+  curFriedChicken: {fileID: 0}

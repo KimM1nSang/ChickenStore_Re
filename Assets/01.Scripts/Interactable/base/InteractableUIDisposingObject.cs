@@ -29,18 +29,17 @@ public class InteractableUIDisposingObject : InteractableDisposingObject
         if (btn == null && keyResult.gameObject.CompareTag("Pickable"))
         {
             currentDisposedObject = keyDownresults[0].gameObject;
-            lastPos = currentDisposedObject.transform.GetComponent<RectTransform>().anchoredPosition;
+            lastPos = currentDisposedObject.transform.position;
         }
     }
 
     public override void CallOnKeyHolding()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            Vector2 mousePos = Input.mousePosition;
-            if (currentDisposedObject != null)
-                currentDisposedObject.transform.position = mousePos;
-        }
+        if (!EventSystem.current.IsPointerOverGameObject()) return;
+
+        Vector2 mousePos = Input.mousePosition;
+        if (currentDisposedObject != null)
+            currentDisposedObject.transform.position = mousePos;
     }
     
     public override void CallOnKeyUp()
@@ -59,12 +58,12 @@ public class InteractableUIDisposingObject : InteractableDisposingObject
         {
             if(!keyUpresults[1].gameObject.CompareTag("Dropable"))
             {
-                currentDisposedObject.transform.GetComponent<RectTransform>().anchoredPosition = lastPos;
+                currentDisposedObject.transform.position= lastPos;
             }
         }
         else
         {
-            currentDisposedObject.transform.GetComponent<RectTransform>().anchoredPosition = lastPos;
+            currentDisposedObject.transform.position = lastPos;
         }
     }
 }

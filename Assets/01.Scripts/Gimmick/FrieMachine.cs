@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class FrieMachine : MonoBehaviour
 {
-    [SerializeField]
-    private OilTempSlider oilTempSlider;
+    [field: SerializeField]
+    public OilTempSlider oilTempSlider { get; private set; }
 
+    public ChickenData curFriedChicken;
 }
