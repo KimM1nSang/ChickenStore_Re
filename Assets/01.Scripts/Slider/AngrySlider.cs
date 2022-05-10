@@ -23,7 +23,7 @@ public class AngrySlider : SliderGimmick
             DefineAddValue(ref progressValue, progressMaxValue, addValue * Time.deltaTime);
         }
 
-        if(CheckFull() && !GameManager.Instance.isAngry)
+        if(CheckFull() && !GameManager.Instance.isPlayerAngry)
         {
             Timing.RunCoroutine(AngryProcess());
         }
@@ -31,7 +31,7 @@ public class AngrySlider : SliderGimmick
     }
     private IEnumerator<float> AngryProcess()
     {
-        GameManager.Instance.isAngry = true;
+        GameManager.Instance.isPlayerAngry = true;
 
         while(!CheckEmpty())
         {
@@ -39,7 +39,7 @@ public class AngrySlider : SliderGimmick
         }
 
         yield return Timing.WaitForOneFrame;
-        GameManager.Instance.isAngry = false;
+        GameManager.Instance.isPlayerAngry = false;
     }
     public override bool Action()
     {

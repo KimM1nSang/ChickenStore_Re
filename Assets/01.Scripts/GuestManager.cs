@@ -15,6 +15,11 @@ public class GuestManager : MonoBehaviour
 
     public Text guestComment;
 
+    public Action OnGuestExit;
+    public Action OnGuestEnter;
+    public Action OnGuestOffered;
+
+    public bool isGuestAngry;
     private void Awake()
     {
         Instance = this;
@@ -32,7 +37,7 @@ public class GuestManager : MonoBehaviour
         }
         
         curGuest.SetUp();
-        curGuest.GuestEnter(EnterComment);
+        curGuest.GuestEnter(()=> { EnterComment(); OnGuestEnter?.Invoke(); });
 
     }
     public bool Offer()
@@ -43,7 +48,7 @@ public class GuestManager : MonoBehaviour
             {
                 // 치킨이 고객의 주문에 맞으면 트루
                 // 치킨을 제공했을때의 처리
-                //curGuest.SetComment();
+                OnGuestOffered?.Invoke();
                 guestComment.DOText(curGuest.ExitComment, 1).OnComplete(() => {
                     SaveManager.Instance.moneyData.AddGold(100);
                     GuestCommentRefresh();
@@ -56,12 +61,12 @@ public class GuestManager : MonoBehaviour
     }
     public void Complete(Action act = null)
     {
-        // 치킨이 고객의 주문에 맞으면 트루
-        // 치킨을 제공했을때의 처리
-        //curGuest.SetComment();
         GuestCommentRefresh();
 
+        OnGuestOffered?.Invoke();
+
         guestComment.DOText(curGuest.ExitComment, 1).OnComplete(() => {
+            OnGuestExit?.Invoke();
             act?.Invoke();
             GuestExit();
         });
@@ -76,11 +81,15 @@ public class GuestManager : MonoBehaviour
     {
         if (curGuest.canOffered && curGuest.isArrive)
         {
-            GameManager.Instance.CameraShaking(2);
+            if(FindObjectOfType<ShootManager>().Shoot())
+            {
+                GameManager.Instance.CameraShaking(2);
+                curGuest.SetExitComment(ExitType.SHOOTED);
+                Complete();
+                curGuest.canOffered = false;
+                isGuestAngry = false;
+            }
 
-            curGuest.SetExitComment(ExitType.SHOOTED);
-            Complete();
-            curGuest.canOffered = false;
         }
     }
 
@@ -93,4 +102,5 @@ public class GuestManager : MonoBehaviour
     {
         guestComment.text = "";
     }
+
 }

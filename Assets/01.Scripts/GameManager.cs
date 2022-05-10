@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Image angryPanel;
 
-    public bool isAngry;
+    public bool isPlayerAngry = false;
 
     public int Difficulty = 0;
     public int MaxDifficulty = 3;
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        if (!isAngry)
+        if (!isPlayerAngry)
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
             GuestManager.Instance.ShootGuest();
         }
 
-        if (isAngry)
+        if (isPlayerAngry)
         {
             angryPanel.color = new Color(1, 0, 0, .25f);
         }

@@ -18,6 +18,10 @@ public class DisposingChicken : InteractableUIDisposingObject
             {
                 if(guest.canOffered&& guest.isArrive)
                 {
+
+                    // 치킨이 고객의 주문에 맞으면 트루
+                    // 치킨을 제공했을때의 처리
+
                     ChickenData chickenData = currentDisposedObject.GetComponent<ChickenData>();
                     if (chickenData.chickenType == guest.wishChicken)
                     {
