@@ -6,7 +6,8 @@ using System;
 
 public class Guest : MonoBehaviour
 {
-    RectTransform rt;
+    private RectTransform rt;
+    public bool isArrive = false;
     public void SetUp()
     {
         rt = GetComponent<RectTransform>();
@@ -14,14 +15,10 @@ public class Guest : MonoBehaviour
     }
     public void GuestEnter()
     {
-        rt.DOAnchorPosX(0,1);
+        rt.DOAnchorPosX(0,1).OnComplete(()=> { isArrive = true; });
     }
     public void GuestExit(Action act)
     {
-        rt.DOAnchorPosX(-550, 1).OnComplete(()=> { act?.Invoke(); });
-    }
-    public void GuestExit()
-    {
-        rt.DOAnchorPosX(-550, 1);
+        rt.DOAnchorPosX(-550, 1).OnComplete(()=> { act?.Invoke(); isArrive = false; });
     }
 }

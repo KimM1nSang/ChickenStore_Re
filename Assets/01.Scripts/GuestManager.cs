@@ -10,6 +10,7 @@ public class GuestManager : MonoBehaviour
     public Guest curGuest;
     public GameObject guestPrefab;
     public Transform windowTrm;
+
     private void Awake()
     {
         Instance = this;
@@ -33,15 +34,15 @@ public class GuestManager : MonoBehaviour
     {
         if(curGuest != null)
         {
-            // 치킨이 고객의 주문에 맞으면 트루
-            // 치킨을 제공했을때의 처리
-            curGuest.GuestExit(() => { CreateGuest(); });
-
-            return true;
+            if(curGuest.isArrive)
+            {
+                // 치킨이 고객의 주문에 맞으면 트루
+                // 치킨을 제공했을때의 처리
+                SaveManager.Instance.moneyData.AddGold(100);
+                curGuest.GuestExit(() => { CreateGuest(); });
+                return true;
+            }
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 }
