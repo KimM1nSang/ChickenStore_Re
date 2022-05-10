@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MEC;
 using static Define;
 
 public class AngrySlider : SliderGimmick
@@ -24,20 +25,20 @@ public class AngrySlider : SliderGimmick
 
         if(CheckFull() && !GameManager.Instance.isAngry)
         {
-            StartCoroutine(AngryProcess());
+            Timing.RunCoroutine(AngryProcess());
         }
 
     }
-    private IEnumerator AngryProcess()
+    private IEnumerator<float> AngryProcess()
     {
         GameManager.Instance.isAngry = true;
 
         while(!CheckEmpty())
         {
-            yield return new WaitForEndOfFrame();
+            yield return Timing.WaitForOneFrame;
         }
 
-        yield return new WaitForEndOfFrame();
+        yield return Timing.WaitForOneFrame;
         GameManager.Instance.isAngry = false;
     }
     public override bool Action()

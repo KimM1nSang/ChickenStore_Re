@@ -42,7 +42,7 @@ public class InteractableUIDisposingObject : InteractableDisposingObject
                 currentDisposedObject.transform.position = mousePos;
         }
     }
-
+    
     public override void CallOnKeyUp()
     {
         if (!EventSystem.current.IsPointerOverGameObject()) return;

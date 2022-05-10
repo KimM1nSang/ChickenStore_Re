@@ -173,7 +173,7 @@ public class SaveManager : MonoBehaviour
             LoadGameData();
         }
     }
-    /*private void OnApplicationQuit()
+    private void OnApplicationQuit()
     {
         SaveGameData();
     }
@@ -181,7 +181,7 @@ public class SaveManager : MonoBehaviour
     private void OnApplicationPause(bool pause)
     {
         SaveGameData();
-    }*/
+    }
 
     private void AutoSave()
     {
