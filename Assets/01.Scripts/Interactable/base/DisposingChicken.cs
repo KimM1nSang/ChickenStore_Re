@@ -16,10 +16,15 @@ public class DisposingChicken : InteractableUIDisposingObject
             Guest guest = keyResult.gameObject.GetComponent<Guest>();
             if (guest != null)
             {
-                if (GuestManager.Instance.Offer())
+                if(!guest.isOffered)
                 {
-                    Destroy(currentDisposedObject.gameObject);
+                    if (GuestManager.Instance.Offer())
+                    {
+                        guest.isOffered = true;
+                        Destroy(currentDisposedObject.gameObject);
+                    }
                 }
+               
             }
          
         }

@@ -56,6 +56,11 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        if(Input.GetMouseButtonDown(1))
+        {
+            print("น฿ป็");
+            GuestManager.Instance.GetNextGuest();
+        }
 
         if (isAngry)
         {

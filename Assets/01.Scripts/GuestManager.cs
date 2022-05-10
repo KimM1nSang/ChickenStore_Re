@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
+using DG.Tweening;
 
 public class GuestManager : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class GuestManager : MonoBehaviour
     public GameObject guestPrefab;
     public Transform windowTrm;
 
+    public Text guestComment;
     private void Awake()
     {
         Instance = this;
@@ -18,6 +21,7 @@ public class GuestManager : MonoBehaviour
     private void Start()
     {
         CreateGuest();
+        GuestCommentRefresh();
     }
     public void CreateGuest()
     {
@@ -34,15 +38,27 @@ public class GuestManager : MonoBehaviour
     {
         if(curGuest != null)
         {
-            if(curGuest.isArrive)
+            if (curGuest.isArrive)
             {
                 // 치킨이 고객의 주문에 맞으면 트루
                 // 치킨을 제공했을때의 처리
-                SaveManager.Instance.moneyData.AddGold(100);
-                curGuest.GuestExit(() => { CreateGuest(); });
+                guestComment.DOText(curGuest.ExitComment, 1).OnComplete(() => {
+                    SaveManager.Instance.moneyData.AddGold(100);
+                    GetNextGuest();
+                });
                 return true;
             }
         }
         return false;
+    }
+    public void GetNextGuest()
+    {
+       
+        GuestCommentRefresh();
+        curGuest.GuestExit(() => { CreateGuest(); });
+    }
+    public void GuestCommentRefresh()
+    {
+        guestComment.text = "";
     }
 }
