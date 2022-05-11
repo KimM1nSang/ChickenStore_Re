@@ -259,11 +259,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   progressValue: 0
   progressMaxValue: 100
-  <subSpeed>k__BackingField: 10
+  <SubSpeed>k__BackingField: 2
   <addValue>k__BackingField: 10
   valPercet: 0
   sliderFill: {fileID: 561400099707251256}
-  canFrieTemp: 0
 --- !u!1 &561400100608123047
 GameObject:
   m_ObjectHideFlags: 0

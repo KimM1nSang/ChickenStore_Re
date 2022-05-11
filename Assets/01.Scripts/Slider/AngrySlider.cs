@@ -16,7 +16,7 @@ public class AngrySlider : SliderGimmick
     {
         if(GameManager.Instance.isSmartPhoneUse)
         {
-            DefineSubValue(ref progressValue, subSpeed * Time.deltaTime);
+            DefineSubValue(ref progressValue, SubSpeed * Time.deltaTime);
         }
         else
         {

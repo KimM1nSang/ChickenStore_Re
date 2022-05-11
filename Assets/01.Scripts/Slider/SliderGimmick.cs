@@ -11,7 +11,7 @@ public class SliderGimmick : MonoBehaviour
     [SerializeField]
     public  float progressMaxValue = 100;
     [field:SerializeField]
-    public virtual float subSpeed { get; set; } = 1;
+    public virtual float SubSpeed { get; set; } = 1;
     [field:SerializeField]
     public virtual float addValue{ get; set; } = 1;
 
@@ -33,7 +33,7 @@ public class SliderGimmick : MonoBehaviour
     protected virtual void OverrideUpdate()
     {
 
-            DefineSubValue(ref progressValue, subSpeed * Time.deltaTime);
+            DefineSubValue(ref progressValue, SubSpeed * Time.deltaTime);
 
     }
     public virtual bool Action()

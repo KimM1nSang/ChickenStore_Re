@@ -11,47 +11,57 @@ public class GameManager : MonoBehaviour
     [field: SerializeField]
     public bool isSmartPhoneUse { get; set; } = false;
 
-    [SerializeField]
-    private Transform chickenSpawnTrm;
-    [SerializeField]
-    private GameObject chickenPrefab;
 
 
     public bool isPlayerAngry = false;
+    private int difficulty = 0;
+    public int Difficulty
+    {
+        get
+        {
+            return difficulty;
+        }
+        set
+        {
+            difficulty = value;
 
-    public int Difficulty = 0;
+            GameChangeAsDifficulty();
+        }
+    }
     public int MaxDifficulty = 3;
 
     public CinemachineImpulseSource ImpulseSource;
 
     public List<ChickenData> makedChickenList = new List<ChickenData>();
+
+    [Header("기믹들")]
+    [SerializeField] [Tooltip("인내심")]
+    private GameObject Patience;
+    [SerializeField] [Tooltip("총")]
+    private GameObject BulletBox;
+    [SerializeField] [Tooltip("튀김기")]
+    private GameObject FrieMachine;
+    [SerializeField] [Tooltip("냉장고")]
+    private GameObject Refrigerator;
+    [SerializeField] [Tooltip("플레이어 분노")]
+    private GameObject PlayerAngryGimmick;
     private void Awake()
     {
         Instance = this;
     }
-    void Update()
+    public void GameChangeAsDifficulty()
     {
-       /* if (!isPlayerAngry)
+        switch (Difficulty)
         {
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                if (oilTempSlider.Action())
-                {
-                    GameObject chickenObj = Instantiate(chickenPrefab, chickenSpawnTrm);
-                    chickenObj.transform.position = chickenSpawnTrm.position;
-                    ChickenData chickenData = chickenObj.GetComponent<ChickenData>();
-                    chickenData.SetUp(ChickenType.RAW);
-                    makedChickenList.Add(chickenData);
-                    oilTempSlider.progressValue = 0;
-                }
-            }
-
-        }*/
-     
-      
-
-        
-
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
     }
     public void CameraShaking(float force)//주어진 값으로 카메라 흔드는 함수
     {

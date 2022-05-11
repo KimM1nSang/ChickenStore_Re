@@ -14,24 +14,25 @@ public class DisposingChicken : InteractableUIDisposingObject
         if (keyDownresults.Count <= 0) return;
 
         RaycastResult keyResult = keyDownresults[0];
-        Button btn = keyResult.gameObject.GetComponent<Button>();
 
-        if (btn == null&& keyResult.gameObject.CompareTag("Pickable") && keyDownresults.Count > 1)
+        foreach (RaycastResult item in keyDownresults)
         {
-            RaycastResult keyResult2 = keyDownresults[1];
-
-            FrieMachine frieMachine = keyResult2.gameObject.GetComponent<FrieMachine>();
-            Refrigerator refrigerator = keyResult2.gameObject.GetComponent<Refrigerator>();
-
-            if (frieMachine != null)
+            Button btn = item.gameObject.GetComponent<Button>();
+            if (btn == null && item.gameObject.CompareTag("Pickable") && keyDownresults.Count > 1)
             {
-                frieMachine.curFriedChicken = null;
-            }
-            if(refrigerator != null)
-            {
+                RaycastResult keyResult2 = keyDownresults[1];
+
+                FrieMachine frieMachine = keyResult2.gameObject.GetComponent<FrieMachine>();
+
+                if (frieMachine != null)
+                {
+                    frieMachine.CurFriedChicken = null;
+                }
                 currentDisposedObject.transform.SetParent(chickenOriginalParentTrm);
+                break;
             }
         }
+       
     }
     public override void CallOnKeyUp()
     {
@@ -41,7 +42,7 @@ public class DisposingChicken : InteractableUIDisposingObject
         {
             RaycastResult keyResult = keyUpresults[1];
 
-            print(keyResult.gameObject.name);
+            //print(keyResult.gameObject.name);
             ChickenData chickenData = currentDisposedObject.GetComponent<ChickenData>();
             if(chickenData != null)
             {
@@ -55,7 +56,7 @@ public class DisposingChicken : InteractableUIDisposingObject
                         // 치킨이 고객의 주문에 맞으면 트루
                         // 치킨을 제공했을때의 처리
 
-                        if (chickenData.chickenType == guest.wishChicken)
+                        if (chickenData.ChickenType == guest.wishChicken)
                         {
                             guest.SetExitComment(ExitType.POSITIVE);
                         }
@@ -64,8 +65,10 @@ public class DisposingChicken : InteractableUIDisposingObject
                             guest.SetExitComment(ExitType.NEGATIVE);
                         }
                         GuestManager.Instance.Complete(() => {
-                            SaveManager.Instance.moneyData.AddGold(chickenData.Price);
+                            if (chickenData.ChickenType == guest.wishChicken)
+                                SaveManager.Instance.moneyData.AddGold(chickenData.Price);
                         });
+                        GameManager.Instance.makedChickenList.Remove(chickenData);
                         Destroy(currentDisposedObject.gameObject);
                         guest.canOffered = false;
 
@@ -75,17 +78,19 @@ public class DisposingChicken : InteractableUIDisposingObject
 
                 if (frieMachine != null)
                 {
-                    frieMachine.curFriedChicken = chickenData;
+                    frieMachine.CurFriedChicken = chickenData;
                     currentDisposedObject.transform.position = frieMachine.transform.position;
                 }
                 if(refrigerator != null)
                 {
                     currentDisposedObject.gameObject.transform.SetParent(refrigerator.container);
                 }
-            }    
-            
-         
+
+            }
+
+
         }
+        lastPos = currentDisposedObject.transform.position;
         var ped = new PointerEventData(null);
         ped.position = lastPos;
         keyUpresults = new List<RaycastResult>();
@@ -94,14 +99,13 @@ public class DisposingChicken : InteractableUIDisposingObject
         
         if (keyUpresults.Count > 1)
         {
-                print("AAA");
             RaycastResult keyResult = keyUpresults[1];
             Refrigerator refrigerator = keyResult.gameObject.GetComponent<Refrigerator>();
 
             if (refrigerator != null)
             {
-                print("CCCC");
                 currentDisposedObject.gameObject.transform.SetParent(refrigerator.container);
+                print("보관");
             }
         }
         currentDisposedObject = null;

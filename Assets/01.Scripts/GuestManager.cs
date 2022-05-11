@@ -81,14 +81,19 @@ public class GuestManager : MonoBehaviour
     {
         if (curGuest.canOffered && curGuest.isArrive)
         {
-            if(FindObjectOfType<ShootManager>().Shoot())
+            ShootManager shootManager = FindObjectOfType<ShootManager>();
+            if(shootManager != null)
             {
-                GameManager.Instance.CameraShaking(2);
-                curGuest.SetExitComment(ExitType.SHOOTED);
-                Complete();
-                curGuest.canOffered = false;
-                isGuestAngry = false;
+                if (shootManager.Shoot())
+                {
+                    GameManager.Instance.CameraShaking(2);
+                    curGuest.SetExitComment(ExitType.SHOOTED);
+                    Complete();
+                    curGuest.canOffered = false;
+                    isGuestAngry = false;
+                }
             }
+           
 
         }
     }

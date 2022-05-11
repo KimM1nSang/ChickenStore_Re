@@ -8,7 +8,8 @@ public class GuestPatienceSlider : SliderGimmick
 {
     public bool isActive = false;
     private bool isRunCor = false;
-
+    [SerializeField]
+    private Canvas guestAngryCanvas;
     [SerializeField]
     private GameObject attackPanelGO;
     protected override void OverrideStart()
@@ -18,6 +19,7 @@ public class GuestPatienceSlider : SliderGimmick
         GuestManager.Instance.OnGuestExit += () => { progressValue = 0; };
         GuestManager.Instance.OnGuestEnter += ()=> { isActive = true; };
         attackPanelGO.SetActive(false);
+        guestAngryCanvas.sortingOrder = 0;
     }
     protected override void OverrideUpdate()
     {
@@ -37,6 +39,8 @@ public class GuestPatienceSlider : SliderGimmick
     {
         //상태 복구
         GuestManager.Instance.isGuestAngry = true;
+        guestAngryCanvas.sortingOrder = 6;
+
         attackPanelGO.SetActive(true);
         float num = 0;
         while (num < 2)
@@ -58,5 +62,6 @@ public class GuestPatienceSlider : SliderGimmick
         }
         attackPanelGO.SetActive(false);
         isRunCor = false;
+        guestAngryCanvas.sortingOrder = 0;
     }
 }

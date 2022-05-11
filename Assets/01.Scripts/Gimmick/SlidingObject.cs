@@ -22,15 +22,18 @@ public class SlidingObject : MonoBehaviour
         rt = GetComponent<RectTransform>();
 
         activeButton.onClick.AddListener(()=> {
-            if(isActive)
+            if(!GameManager.Instance.isPlayerAngry && !GameManager.Instance.isSmartPhoneUse)
             {
-                rt.DOAnchorPos(unActivePos, activeSpeed);
+                if (isActive)
+                {
+                    rt.DOAnchorPos(unActivePos, activeSpeed);
+                }
+                else
+                {
+                    rt.DOAnchorPos(activePos, activeSpeed);
+                }
+                isActive = !isActive;
             }
-            else
-            {
-                rt.DOAnchorPos(activePos, activeSpeed);
-            }
-            isActive = !isActive;
         });
     }
 }

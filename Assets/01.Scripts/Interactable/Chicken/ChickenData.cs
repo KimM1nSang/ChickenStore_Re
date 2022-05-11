@@ -12,19 +12,31 @@ public enum ChickenType
 }
 public class ChickenData : MonoBehaviour
 {
-    public ChickenType chickenType;
+    [SerializeField]
+    private ChickenType chickenType;
+    public ChickenType ChickenType
+    {
+        get
+        {
+            return chickenType;
+        }
+        set
+        {
+            chickenType = value;
+            RefreshChicken();
+        }
+    }
     public float Price;
 
     private Image chickenImage;
     public void SetUp(ChickenType chickenType)
     {
-        this.chickenType = chickenType;
         chickenImage = GetComponent<Image>();
-        RefreshChicken();
+        this.ChickenType = chickenType;
     }
     public void RefreshChicken()
     {
-        switch (chickenType)
+        switch (ChickenType)
         {
             case ChickenType.RAW:
                 Price = 10;

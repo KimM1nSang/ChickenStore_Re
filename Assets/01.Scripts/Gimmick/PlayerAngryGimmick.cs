@@ -10,7 +10,14 @@ public class PlayerAngryGimmick : MonoBehaviour
     private RectTransform smartPhone;
 
     [SerializeField]
+    private Canvas playerAngryCanvas;
+    [SerializeField]
     private Image angryPanel;
+
+    private void Start()
+    {
+        playerAngryCanvas.sortingOrder = 2;
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -29,10 +36,12 @@ public class PlayerAngryGimmick : MonoBehaviour
 
         if (GameManager.Instance.isPlayerAngry)
         {
+            playerAngryCanvas.sortingOrder = 5;
             angryPanel.color = new Color(1, 0, 0, .25f);
         }
         else
         {
+            playerAngryCanvas.sortingOrder = 2;
             angryPanel.color = new Color(0, 0, 0, 0);
         }
     }
