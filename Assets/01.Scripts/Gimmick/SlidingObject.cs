@@ -17,9 +17,10 @@ public class SlidingObject : MonoBehaviour
     public Vector2 activePos;
     public Vector2 unActivePos;
 
-    private void Start()
+    protected virtual void Start()
     {
         rt = GetComponent<RectTransform>();
+        DayManager.Instance.OnChangeDay += CallOnChangeDay;
 
         activeButton.onClick.AddListener(()=> {
             if(!GameManager.Instance.isPlayerAngry && !GameManager.Instance.isSmartPhoneUse)
@@ -35,5 +36,9 @@ public class SlidingObject : MonoBehaviour
                 isActive = !isActive;
             }
         });
+    }
+    public virtual void CallOnChangeDay()
+    {
+        rt.DOAnchorPos(unActivePos, activeSpeed);
     }
 }

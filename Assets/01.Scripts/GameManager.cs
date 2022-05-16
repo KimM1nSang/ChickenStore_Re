@@ -4,13 +4,13 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using Cinemachine;
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
     [field: SerializeField]
     public bool isSmartPhoneUse { get; set; } = false;
-
 
 
     public bool isPlayerAngry = false;
@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
             GameChangeAsDifficulty();
         }
     }
-    public int MaxDifficulty = 3;
+    public int MaxDifficulty = 4;
 
     public CinemachineImpulseSource ImpulseSource;
 
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     [Header("±â¹Íµé")]
     [SerializeField] [Tooltip("ÀÎ³»½É")]
-    private GameObject Patience;
+    private GameObject GuestAngry;
     [SerializeField] [Tooltip("ÃÑ")]
     private GameObject BulletBox;
     [SerializeField] [Tooltip("Æ¢±è±â")]
@@ -45,21 +45,47 @@ public class GameManager : MonoBehaviour
     private GameObject Refrigerator;
     [SerializeField] [Tooltip("ÇÃ·¹ÀÌ¾î ºÐ³ë")]
     private GameObject PlayerAngryGimmick;
+    [SerializeField] [Tooltip("¼Ò½ºÅë")]
+    private GameObject SauceBowl;
+    [SerializeField] [Tooltip("»Ñ¸µÅ¬Åë")]
+    private GameObject PurrinKleBowl;
     private void Awake()
     {
         Instance = this;
     }
+    private void Start()
+    {
+        GameChangeAsDifficulty();
+        DayManager.Instance.OnChangeDay += CallOnChangeDay;
+    }
+    public void CallOnChangeDay()
+    {
+
+    }
     public void GameChangeAsDifficulty()
     {
+        GuestAngry.SetActive(difficulty > 2);
+        BulletBox.SetActive(difficulty > 2);
+
+        FrieMachine.SetActive(difficulty > 0);
+        SauceBowl.SetActive(difficulty > 1);
+        PurrinKleBowl.SetActive(difficulty > 3);
+
+        Refrigerator.SetActive(true);
+        PlayerAngryGimmick.SetActive(true);
+
         switch (Difficulty)
         {
             case 0:
                 break;
             case 1:
+              
                 break;
             case 2:
                 break;
             case 3:
+                break;
+            case 4:
                 break;
         }
     }
@@ -76,7 +102,7 @@ public class GameManager : MonoBehaviour
 
     public void SubDifficulty()
     {
-        if (Difficulty > 1)
+        if (Difficulty > 0)
             Difficulty--;
     }
 
@@ -85,4 +111,5 @@ public class GameManager : MonoBehaviour
         if (InNum < MaxDifficulty && InNum > 1)
             Difficulty = InNum;
     }
+
 }

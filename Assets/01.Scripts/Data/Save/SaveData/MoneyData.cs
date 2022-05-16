@@ -14,13 +14,44 @@ public class MoneyData : ISerializeble
     {
         get { return gold; }
     }
+    
+    [Tooltip("ÆòÆÇ")]
+    [SerializeField] private float repute;
+
+    public float Repute
+    {
+        get { return repute; }
+    }
 
     public Action OnChangeGold;
+    public Action OnChangeRepute;
 
     public void AddGold(float amount)
     {
         gold += amount;
         OnChangeGold?.Invoke();
+    }
+
+    public bool SubGold(int v)
+    {
+        if (gold >= v)
+        {
+            gold -= v;
+            OnChangeGold?.Invoke();
+            return true;
+        }
+        return false;
+    }
+    public void AddRepute(float amount)
+    {
+        repute += amount;
+        OnChangeRepute?.Invoke();
+    }
+
+    public void SubRepute(int v)
+    {
+        repute -= v;
+        OnChangeRepute?.Invoke();
     }
     public void Desirialize(string jsonString)
     {
@@ -40,4 +71,5 @@ public class MoneyData : ISerializeble
 
         return returnVal;
     }
+
 }

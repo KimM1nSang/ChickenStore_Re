@@ -59,17 +59,23 @@ public class GuestManager : MonoBehaviour
         }
         return false;
     }
-    public void Complete(Action act = null)
+    public void Complete(Action act = null, bool isEnd = false)
     {
-        GuestCommentRefresh();
+        if (curGuest.canOffered && curGuest.isArrive)
+        {
+            GuestCommentRefresh();
 
-        OnGuestOffered?.Invoke();
+            OnGuestOffered?.Invoke();
+            curGuest.canOffered = false;
 
-        guestComment.DOText(curGuest.ExitComment, 1).OnComplete(() => {
-            OnGuestExit?.Invoke();
-            act?.Invoke();
-            GuestExit();
-        });
+
+            guestComment.DOText(curGuest.ExitComment, 1).OnComplete(() => {
+                OnGuestExit?.Invoke();
+                act?.Invoke();
+                GuestExit(isEnd);
+            });
+        }
+       
     }
     public void EnterComment()
     {
@@ -89,7 +95,6 @@ public class GuestManager : MonoBehaviour
                     GameManager.Instance.CameraShaking(2);
                     curGuest.SetExitComment(ExitType.SHOOTED);
                     Complete();
-                    curGuest.canOffered = false;
                     isGuestAngry = false;
                 }
             }
@@ -98,10 +103,11 @@ public class GuestManager : MonoBehaviour
         }
     }
 
-    public void GuestExit()
+    public void GuestExit(bool isEnd)
     {
         GuestCommentRefresh();
-        curGuest.GuestExit(() => { CreateGuest(); });
+        if (!isEnd)
+            curGuest.GuestExit(() => { CreateGuest(); });
     }
     public void GuestCommentRefresh()
     {

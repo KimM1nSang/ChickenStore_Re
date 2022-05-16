@@ -10,31 +10,42 @@ public class Refrigerator : SlidingObject
 
     [SerializeField]
     private GameObject chickenPrefab;
-
+    protected override void Start()
+    {
+        base.Start();
+        DayManager.Instance.OnPurchaseChicken += CallOnPurchaseChicken;
+        for (int i = 0; i < 5; i++)
+        {
+            AddItemToRefrigerator();
+        }
+    }
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.O))
+       /* if(Input.GetKeyDown(KeyCode.O))
         {
             AddItemToRefrigerator();
             
-        }
+        }*/
         if(Input.GetKeyDown(KeyCode.Tab)&& !Input.GetKeyDown(KeyCode.Space))
         {
             activeButton.onClick?.Invoke();
         }
     }
-
+    public void CallOnPurchaseChicken()
+    {
+        if (SaveManager.Instance.moneyData.SubGold(5))
+        {
+            AddItemToRefrigerator();
+        }
+    }
     public void AddItemToRefrigerator()
     {
-        if(GameManager.Instance.makedChickenList.Count < 3)
-        {
-            Transform chickenSpawnTrm = itemSpawnTrms[Random.Range(0, itemSpawnTrms.Length)];
-            GameObject chickenObj = Instantiate(chickenPrefab, container);
-            chickenObj.transform.position = chickenSpawnTrm.position;
-            ChickenData chickenData = chickenObj.GetComponent<ChickenData>();
-            chickenData.SetUp(ChickenType.RAW);
-            GameManager.Instance.makedChickenList.Add(chickenData);
-        }
+        Transform chickenSpawnTrm = itemSpawnTrms[Random.Range(0, itemSpawnTrms.Length)];
+        GameObject chickenObj = Instantiate(chickenPrefab, container);
+        chickenObj.transform.position = chickenSpawnTrm.position;
+        ChickenData chickenData = chickenObj.GetComponent<ChickenData>();
+        chickenData.SetUp(ChickenType.RAW);
+        GameManager.Instance.makedChickenList.Add(chickenData);
     }
 
 }

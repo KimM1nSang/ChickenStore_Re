@@ -20,11 +20,16 @@ public class SliderGimmick : MonoBehaviour
     {
         slider = GetComponent<Slider>();
         OverrideStart();
+        DayManager.Instance.OnChangeDay += CallOnChangeDay;
     }
     private void Update()
     {
         RefreshSlider();
         OverrideUpdate();
+    }
+    public virtual void CallOnChangeDay()
+    {
+        progressValue = 0;
     }
     protected virtual void OverrideStart()
     {
