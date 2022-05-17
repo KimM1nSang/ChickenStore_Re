@@ -20,7 +20,10 @@ public class AngrySlider : SliderGimmick
         }
         else
         {
-            DefineAddValue(ref progressValue, progressMaxValue, addValue * Time.deltaTime);
+            if(!GameManager.Instance.isPlayerAngry)
+            {
+                DefineAddValue(ref progressValue, progressMaxValue, addValue * Time.deltaTime);
+            }
         }
 
         if(CheckFull() && !GameManager.Instance.isPlayerAngry)

@@ -19,10 +19,13 @@ public class DayManager : MonoBehaviour
     public bool canGotoNextDay = false;
 
     public Button gotoNextDayBtn;
-    public Button purchaseChickenBtm;
+    public Button purchaseChickenBtn;
+    public Button stopBtn;
 
     public Action OnChangeDay;
     public Action OnPurchaseChicken;
+
+    private bool gotoNextDay = false;
 
     [SerializeField]
     private string curTimeStr;
@@ -50,9 +53,15 @@ public class DayManager : MonoBehaviour
     private void Start()
     {
         gotoNextDayBtn.onClick.AddListener(()=> { canGotoNextDay = true; });
-        purchaseChickenBtm.onClick.AddListener(() => { OnPurchaseChicken?.Invoke(); });
+        stopBtn.onClick.AddListener(()=> {
+            if(GuestManager.Instance.curGuest.isArrive && GuestManager.Instance.curGuest.canOffered)
+            {
+                gotoNextDay = true;
+            }
+        });
+        purchaseChickenBtn.onClick.AddListener(() => { OnPurchaseChicken?.Invoke(); });
         SaveManager.Instance.moneyData.OnChangeGold += 
-            () => { MoneyText.text = $"보유 자산 : {SaveManager.Instance.moneyData.Gold}"; };
+            () => { MoneyText.text = $"보유 자산 : {SaveManager.Instance.moneyData.Gold} , 보유 치킨 : {GameManager.Instance.makedChickenList.Count}" ; };
         NextDayPanel.SetActive(false);
         Timing.RunCoroutine(TimeManaging());
     }
@@ -64,14 +73,21 @@ public class DayManager : MonoBehaviour
             yield return Timing.WaitForSeconds(60/(60* timeMag));
             float lastDay = curTime.Day;
             AddSecond(60);
-            if(curTime.Day != lastDay)
+
+            stopBtn.gameObject.SetActive(GameManager.Instance.makedChickenList.Count < 1);
+
+            if (curTime.Day != lastDay || gotoNextDay)
             {
-                GuestManager.Instance.Complete(()=> { },true);
+                gotoNextDay = false;
+                stopBtn.gameObject.SetActive(false);
+                curTime = new DateTime(curTime.Year,curTime.Month,curTime.Day);
+                GuestManager.Instance.curGuest.SetExitComment("");
+                GuestManager.Instance.Complete(()=> {
+                 NextDayPanel.SetActive(true);
 
                 GameManager.Instance.isPlayerAngry = true;
 
                 curDay++;
-                NextDayPanel.SetActive(true);
                 // 날짜가 지나면서 일어나는 일들
                 if(curDay % 5 == 0 && curDay < 24)
                 {
@@ -81,7 +97,7 @@ public class DayManager : MonoBehaviour
                 switch (GameManager.Instance.Difficulty)
                 {
                     case 0:
-                        infoStr = "손님들이 생닭을 요구하기 시작했다.\n 마우스 드래그 & 드랍으로 치킨을 움직여 손님에게 대접하자.\n 화면 좌측의 버튼을 누르거나 Tab 을 눌러 냉장고를 열 수있다. \n Space 를 눌러 스트레스를 해소 해야 한다. 스트래스가 가득차면 행동들을 할 수 없다.";
+                        infoStr = "손님들이 생닭을 요구하기 시작했다.\n마우스 드래그 & 드랍으로 치킨을 움직여 손님에게 대접하자.\n화면 좌측의 버튼을 누르거나 Tab 을 눌러 냉장고를 열 수있다. \nSpace 를 눌러 스트레스를 해소 해야 한다. 스트래스가 가득차면 행동들을 할 수 없다.";
                         break;
                     case 1:
                         infoStr = "손님들이 프라이드 치킨을 요구하기 시작했다.\n Q 를 눌러 기름 온도를 올릴 수 있다. \n 기름 온도 슬라이드가 하얀색 일때 테이블 좌측의 노란 박스에 드래그 & 드랍하고 2초 정도 기다려야 한다.";
@@ -97,6 +113,9 @@ public class DayManager : MonoBehaviour
                         break;
                 }
                 infoText.text = infoStr;
+                }
+                ,true);
+               
 
                 while (!canGotoNextDay)
                 {
@@ -105,7 +124,7 @@ public class DayManager : MonoBehaviour
                 OnChangeDay?.Invoke();
 
                 canGotoNextDay = false;
-                GameManager.Instance.   isPlayerAngry = false;
+                GameManager.Instance.isPlayerAngry = false;
 
                 NextDayPanel.SetActive(false);
                 GuestManager.Instance.CreateGuest();

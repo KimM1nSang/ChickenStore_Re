@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class PlayerAngryGimmick : MonoBehaviour
+public class PlayerAngryGimmick : SlidingObject
 {
     [SerializeField]
     private RectTransform smartPhone;
@@ -14,24 +14,29 @@ public class PlayerAngryGimmick : MonoBehaviour
     [SerializeField]
     private Image angryPanel;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         playerAngryCanvas.sortingOrder = 2;
+    }
+    public override void ActiveSliding()
+    {
+        GameManager.Instance.isSmartPhoneUse = !GameManager.Instance.isSmartPhoneUse;
+        if (isActive)
+        {
+            rt.DOAnchorPos(unActivePos, activeSpeed);
+        }
+        else
+        {
+            rt.DOAnchorPos(activePos, activeSpeed);
+        }
+        isActive = !isActive;
     }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            GameManager.Instance.isSmartPhoneUse = !GameManager.Instance.isSmartPhoneUse;
-            if (GameManager.Instance.isSmartPhoneUse)
-            {
-                smartPhone.DOAnchorPosY(0, .25f);
-            }
-            else
-            {
-                smartPhone.DOAnchorPosY(-860, .25f);
-
-            }
+            act?.Invoke();
         }
 
         if (GameManager.Instance.isPlayerAngry)

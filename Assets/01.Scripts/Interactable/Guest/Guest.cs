@@ -21,7 +21,7 @@ public class Guest : MonoBehaviour
         "맛있게 먹었어요!",
         "마왕도 인정하는 이맛",
         "내가 이 치킨을 다시 맛볼줄이야 ㅠㅠ",
-        "오이오이 가게 다시 열줄 알았다고"
+        "가게 다시 열줄 알았다고"
     };
     
     private string[] negativeExitComments  = {

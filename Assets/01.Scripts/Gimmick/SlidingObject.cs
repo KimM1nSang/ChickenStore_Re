@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System;
 
 public class SlidingObject : MonoBehaviour
 {
-    public Button activeButton;
-    private RectTransform rt;
+    public Button activeButton ;
+    protected RectTransform rt;
+    protected Action act;
 
     [SerializeField]
-    private float activeSpeed = .5f;
+    protected float activeSpeed = .5f;
     [SerializeField]
-    private bool isActive = false;
+    protected bool isActive = false;
 
     public Vector2 activePos;
     public Vector2 unActivePos;
@@ -21,21 +23,35 @@ public class SlidingObject : MonoBehaviour
     {
         rt = GetComponent<RectTransform>();
         DayManager.Instance.OnChangeDay += CallOnChangeDay;
+        OverridedStart();
+    }
+    protected virtual void OverridedStart()
+    {
+        act = () => {
+            ActiveSliding();
+        };
+        if (activeButton != null)
+        {
+            activeButton.onClick.AddListener(() => {
+                act?.Invoke();
+            });
+        }
+    }
 
-        activeButton.onClick.AddListener(()=> {
-            if(!GameManager.Instance.isPlayerAngry && !GameManager.Instance.isSmartPhoneUse)
+    public virtual void ActiveSliding()
+    {
+        if (!GameManager.Instance.isPlayerAngry && !GameManager.Instance.isSmartPhoneUse)
+        {
+            if (isActive)
             {
-                if (isActive)
-                {
-                    rt.DOAnchorPos(unActivePos, activeSpeed);
-                }
-                else
-                {
-                    rt.DOAnchorPos(activePos, activeSpeed);
-                }
-                isActive = !isActive;
+                rt.DOAnchorPos(unActivePos, activeSpeed);
             }
-        });
+            else
+            {
+                rt.DOAnchorPos(activePos, activeSpeed);
+            }
+            isActive = !isActive;
+        }
     }
     public virtual void CallOnChangeDay()
     {
